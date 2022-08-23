@@ -1,24 +1,46 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:login/page/login_page.dart';
 
-class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
-  
-class _RegisterState extends State<Register> {
+
+class _RegisterPageState extends State<RegisterPage> {
+  Future<void> register() async {
+
+      var response =
+                await http.post(Uri.parse("https://reqres.in/api/register"),
+                    body: ({
+                      'email': emailController.text.toString(),
+                      'password': passController.text.toString()
+                    }));
+            if (response.statusCode == 200) {
+              Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginPage()));
+              print(response.body);
+            } else {
+              ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Gagal terhubung")));
+            }
+    
+  }
 
   var nameController = TextEditingController();
   var emailController = TextEditingController();
-  var passContrloller = TextEditingController();
+  var passController = TextEditingController();
   var cpassContrloller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text("register")),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SafeArea(
@@ -26,7 +48,6 @@ class _RegisterState extends State<Register> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
@@ -37,7 +58,6 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 height: 15,
               ),
-
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
@@ -48,9 +68,8 @@ class _RegisterState extends State<Register> {
               SizedBox(
                 height: 15,
               ),
-
               TextFormField(
-                controller: passContrloller,
+                controller: passController,
                 obscureText: true,
                 decoration: InputDecoration(
                     labelText: "password",
@@ -58,9 +77,8 @@ class _RegisterState extends State<Register> {
                     suffixIcon: Icon(Icons.password)),
               ),
               SizedBox(
-                height: 45,
+                height: 15,
               ),
-
               TextFormField(
                 controller: cpassContrloller,
                 obscureText: true,
@@ -70,24 +88,39 @@ class _RegisterState extends State<Register> {
                     suffixIcon: Icon(Icons.password)),
               ),
               SizedBox(
-                height: 45,),
-
-
+                height: 45,
+              ),
               OutlinedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    register();
+                  },
                   icon: Icon(
                     Icons.login,
                     size: 18,
                   ),
-                  label: Text("Login")),
-
-              OutlinedButton.icon(
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.login,
-                    size: 18,
+                  label: Text("Register")),
+              SizedBox(
+                height: 15,
+              ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'Sudah Memiliki Akun? ',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
                   ),
-                  label: Text("Register")
+                  TextSpan(
+                      text: 'Login',
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          //get register page into object
+                          Navigator.pop(context);
+                        }),
+                ]),
               ),
             ],
           ),
