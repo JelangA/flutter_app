@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:login/page/home_page.dart';
@@ -15,24 +17,23 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   Future<void> login() async {
-    if (passContrloller.text.isNotEmpty && emailController.text.isNotEmpty) {
+    
       var response = await http.post(Uri.parse("https://reqres.in/api/login"),
           body: ({
             'email': emailController.text,
             'password': passContrloller.text
           }));
+
+          var responeData = json.decode(response.body);
+          
       if (response.statusCode == 200) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => homePage()));
         print(response.body);
-      } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("invalid")));
+      } else if (response.statusCode == 400) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responeData["error"].toString())));
       }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("isi data")));
-    }
+    
   }
 
   var emailController = TextEditingController();
