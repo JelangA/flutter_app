@@ -18,8 +18,8 @@ class _LoginPageState extends State<LoginPage> {
     if (passContrloller.text.isNotEmpty && emailController.text.isNotEmpty) {
       var response = await http.post(Uri.parse("https://reqres.in/api/login"),
           body: ({
-            'email': emailController.text.toString(),
-            'password': passContrloller.text.toString()
+            'email': emailController.text,
+            'password': passContrloller.text
           }));
       if (response.statusCode == 200) {
         Navigator.push(

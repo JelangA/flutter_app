@@ -15,20 +15,22 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   Future<void> register() async {
 
-      var response =
-                await http.post(Uri.parse("https://reqres.in/api/register"),
-                    body: ({
-                      'email': emailController.text.toString(),
-                      'password': passController.text.toString()
-                    }));
-            if (response.statusCode == 200) {
-              Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
-              print(response.body);
-            } else {
-              ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text("Gagal terhubung")));
-            }
+    var response =
+      await http.post(Uri.parse("https://reqres.in/api/register"),
+      body: ({
+        'name': nameController.text,
+        'email': emailController.text,
+        'password': passController.text,
+        'password_confirmation': cpassContrloller.text
+      }));
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context, MaterialPageRoute(builder: (context) => LoginPage()));
+        print(response.body);
+      } else {
+        ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Gagal terhubung")));
+      }
     
   }
 
@@ -111,15 +113,15 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   TextSpan(
-                      text: 'Login',
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          //get register page into object
-                          Navigator.pop(context);
-                        }),
+                    text: 'Login',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                    recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pop(context);
+                    }
+                  ),
                 ]),
               ),
             ],
