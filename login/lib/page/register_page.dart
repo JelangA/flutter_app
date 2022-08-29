@@ -14,24 +14,23 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   Future<void> register() async {
-
+    var url = Uri.parse("http://192.168.18.154/api/register");
     var response =
-      await http.post(Uri.parse("https://reqres.in/api/register"),
-      body: ({
-        'name': nameController.text,
-        'email': emailController.text,
-        'password': passController.text,
-        'password_confirmation': cpassContrloller.text
-      }));
-      if (response.statusCode == 200) {
-        Navigator.push(
+        await http.post(url,
+            body: ({
+              'name': nameController.text,
+              'email': emailController.text,
+              'password': passController.text,
+              'password_confirmation': cpassContrloller.text
+            }));
+    if (response.statusCode == 200) {
+      Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
-        print(response.body);
-      } else {
-        ScaffoldMessenger.of(context)
+      print(response.body);
+    } else {
+      ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Gagal terhubung")));
-      }
-    
+    }
   }
 
   var nameController = TextEditingController();
@@ -113,15 +112,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   TextSpan(
-                    text: 'Login',
-                    style: TextStyle(
-                      color: Colors.blue,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.pop(context);
-                    }
-                  ),
+                      text: 'Login',
+                      style: TextStyle(
+                        color: Colors.blue,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.pop(context);
+                        }),
                 ]),
               ),
             ],
