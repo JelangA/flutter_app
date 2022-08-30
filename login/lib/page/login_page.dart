@@ -27,12 +27,11 @@ class _LoginPageState extends State<LoginPage> {
 
           var responeData = json.decode(response.body);
           
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => homePage()));
-        print(response.body);
-      } else if (response.statusCode == 400) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responeData["error"].toString())));
+            context, MaterialPageRoute(builder: (context) => HomePage()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responeData.toString())));
       }
     
   }

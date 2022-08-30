@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -14,22 +16,25 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   Future<void> register() async {
-    var url = Uri.parse("http://192.168.18.154/api/register");
-    var response =
-        await http.post(url,
-            body: ({
-              'name': nameController.text,
-              'email': emailController.text,
-              'password': passController.text,
-              'password_confirmation': cpassContrloller.text
-            }));
-    if (response.statusCode == 200) {
+    var url = Uri.parse("http://127.0.0.1:8000/api/register");
+    var response = await http.post(url,
+        body: ({
+          'name': nameController.text,
+          'email': emailController.text,
+          'password': passController.text,
+          'password_confirmation': cpassContrloller.text
+        }));
+
+    var responseData = json.decode(response.body);
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("email berhasil didaftarkan")));
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => LoginPage()));
-      print(response.body);
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Gagal terhubung")));
+          .showSnackBar(SnackBar(content: Text(responseData.toString())));
     }
   }
 
