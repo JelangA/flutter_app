@@ -6,6 +6,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:login/page/login_page.dart';
+import 'package:login/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -15,27 +17,36 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  Future<void> register() async {
-    var url = Uri.parse("http://127.0.0.1:8000/api/register");
-    var response = await http.post(url,
-        body: ({
-          'name': nameController.text,
-          'email': emailController.text,
-          'password': passController.text,
-          'password_confirmation': cpassContrloller.text
-        }));
+  // Future<void> register() async {
+  //   var url = Uri.parse("http://127.0.0.1:8000/api/register");
+  //   var response = await http.post(url,
+  //       body: ({
+  //         'name': nameController.text,
+  //         'email': emailController.text,
+  //         'password': passController.text,
+  //         'password_confirmation': cpassContrloller.text
+  //       }));
 
-    var responseData = json.decode(response.body);
+  //   var responseData = json.decode(response.body);
 
-    if (response.statusCode == 201) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("email berhasil didaftarkan")));
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(responseData.toString())));
-    }
+  //   if (response.statusCode == 201) {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text("email berhasil didaftarkan")));
+  //     Navigator.push(
+  //         context, MaterialPageRoute(builder: (context) => LoginPage()));
+  //   } else {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(responseData.toString())));
+  //   }
+  // }
+  Duration get loginTime => Duration(milliseconds: 2250);
+
+  Future<String?> _authUserSignup() {
+    return Future.delayed(loginTime).then((_) {
+      Provider.of<Auth>(context, listen: false).signup(nameController.text,
+          emailController.text, passController.text, cpassContrloller.text);
+      return null;
+    });
   }
 
   var nameController = TextEditingController();
@@ -98,7 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               OutlinedButton.icon(
                   onPressed: () {
-                    register();
+                    // register();
+                    _authUserSignup();
                   },
                   icon: Icon(
                     Icons.login,

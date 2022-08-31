@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:login/page/home_page.dart';
 import 'package:login/page/register_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:login/providers/auth.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,24 +18,45 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // String? _token;
 
-  Future<void> login() async {
-    
-      var response = await http.post(Uri.parse("http://127.0.0.1:8000/api/register"),
-          body: jsonEncode({
-            'email': emailController.text,
-            'password': passContrloller.text
-          }));
+  // bool? get isAuth {
+  //   return token != null;
+  // }
 
-          var responeData = json.decode(response.body);
-          
-      if (response.statusCode == 201) {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(responeData.toString())));
-      }
-    
+  // String? get token {
+  //   if (_token != null) {
+  //     return _token;
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
+  // Future<void> login() async {
+  //   var response = await http.post(Uri.parse("http://127.0.0.1:8000/api/login"),
+  //       body: ({
+  //         'email': emailController.text,
+  //         'password': passContrloller.text
+  //       }));
+
+  //   var responeData = json.decode(response.body);
+
+  //   if (response.statusCode == 201) {
+  //     Navigator.push(
+  //         context, MaterialPageRoute(builder: (context) => HomePage()));
+  //   } else {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(responeData.toString())));
+  //   }
+  // }
+  Duration get loginTime => Duration(milliseconds: 2250);
+
+  Future<String?> _authUserSignin() {
+    return Future.delayed(loginTime).then((_) {
+      Provider.of<Auth>(context, listen: false)
+          .signin(emailController.text, passContrloller.text);
+      return null;
+    });
   }
 
   var emailController = TextEditingController();
@@ -73,7 +96,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
               OutlinedButton.icon(
                   onPressed: () {
-                    login();
+                    // login();
+                    _authUserSignin();
                   },
                   icon: Icon(
                     Icons.login,
