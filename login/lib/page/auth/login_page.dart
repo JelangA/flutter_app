@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:login/page/home_page.dart';
-import 'package:login/page/register_page.dart';
+import 'package:login/page/auth/register_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:login/providers/auth.dart';
 import 'package:provider/provider.dart';
@@ -53,8 +53,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<String?> _authUserSignin() {
     return Future.delayed(loginTime).then((_) {
-      Provider.of<Auth>(context, listen: false)
+      try{
+        Provider.of<Auth>(context, listen: false)
           .signin(emailController.text, passContrloller.text);
+      }catch(err){
+        print(err);
+        return err.toString();
+      }
+      
       return null;
     });
   }
@@ -98,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     // login();
                     _authUserSignin();
+                    
                   },
                   icon: Icon(
                     Icons.login,
@@ -125,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                             MaterialPageRoute(
                                 builder: (context) => RegisterPage()),
                           );
-                        }),
+                    }),
                 ]),
               ),
             ],

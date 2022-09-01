@@ -1,11 +1,11 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:login/page/login_page.dart';
+import 'package:login/page/auth/login_page.dart';
 import 'package:login/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -42,9 +42,18 @@ class _RegisterPageState extends State<RegisterPage> {
   Duration get loginTime => Duration(milliseconds: 2250);
 
   Future<String?> _authUserSignup() {
-    return Future.delayed(loginTime).then((_) {
-      Provider.of<Auth>(context, listen: false).signup(nameController.text,
-          emailController.text, passController.text, cpassContrloller.text);
+    return Future.delayed(loginTime).then((_) async {
+      try {
+        await Provider.of<Auth>(context, listen: false).signup(
+          nameController.text,
+          emailController.text,
+          passController.text,
+          cpassContrloller.text);
+      } catch (err) {
+        print(err);
+        return err.toString();
+      }
+      
       return null;
     });
   }
