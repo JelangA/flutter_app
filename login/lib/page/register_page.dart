@@ -15,8 +15,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  bool isHiddenPassword = true;
+  bool isHiddenCpassword = true;
+
   Future<void> register() async {
     var url = Uri.parse("http://127.0.0.1:8000/api/register");
+    // var url = Uri.parse("http://10.0.2.2:8000/api/register");
     var response = await http.post(url,
         body: ({
           'name': nameController.text,
@@ -76,22 +80,26 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               TextFormField(
                 controller: passController,
-                obscureText: true,
+                obscureText: isHiddenPassword,
                 decoration: InputDecoration(
                     labelText: "password",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.password)),
+                    suffixIcon: InkWell(
+                      onTap: _togglePasswordView,
+                      child: Icon(Icons.visibility))),
               ),
               SizedBox(
                 height: 15,
               ),
               TextFormField(
                 controller: cpassContrloller,
-                obscureText: true,
+                obscureText: isHiddenCpassword,
                 decoration: InputDecoration(
                     labelText: "Confirm password",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.password)),
+                    suffixIcon: InkWell(
+                        onTap: _toggleCPasswordView,
+                        child: Icon(Icons.visibility))),
               ),
               SizedBox(
                 height: 45,
@@ -132,5 +140,16 @@ class _RegisterPageState extends State<RegisterPage> {
         )),
       ),
     );
+  }
+
+  void _togglePasswordView() {
+    setState(() {
+      isHiddenPassword = !isHiddenPassword;
+    });
+  }
+  void _toggleCPasswordView() {
+    setState(() {
+      isHiddenCpassword= !isHiddenCpassword;
+    });
   }
 }
