@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
+
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:login/page/auth/login_page.dart';
+
 import 'package:login/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -117,8 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: 45,
               ),
               OutlinedButton.icon(
-                  onPressed: () {
-                    // register();
+                  onPressed: () { 
                     _authUserSignup();
                   },
                   icon: Icon(

@@ -6,31 +6,64 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Auth with ChangeNotifier {
-  Future<void> signin(String email, String password) async {
-    Uri url = Uri.parse("http://127.0.0.1:8000/api/login");
+  String? _idToken;
 
-    //// url untuk mobile
+  String? _tempidToken;
+
+  void tempData() {
+    _idToken = _tempidToken;
+    // userId = tempuserId;
+    notifyListeners();
+  }
+
+  bool get isAuth {
+    return token != null;
+  }
+
+  String? get token {
+    if (_idToken != null) {
+      return _idToken;
+    } else {
+      return null;
+    }
+  }
+
+  Future<void> signin(String email, String password) async {
+     Uri url = Uri.parse("http://127.0.0.1:8000/api/login");
+    // Uri url = Uri.parse("https://reqres.in/api/login");
+
+    /// url untuk mobile
     // Uri url = Uri.parse("http://10.0.2.2:8000/api/login");
 
-    try{
+    try {
       var response = await http.post(url,
-        body: ({
-          "email": email,
-          "password": password,
-        }));
+          body: ({
+            "email": email,
+            "password": password,
+          }));
 
       var responseData = json.decode(response.body);
+      print(responseData);
 
-        if (responseData['success'] == false) {
+      _tempidToken = responseData["token"];
+      // tempuserId = responseData["localId"];
+
+    //   if (responseData['error'] != null) {
+    //     throw responseData['error'];
+    //   }
+    //   print(responseData);
+    //   notifyListeners();
+    // } catch (error) {
+    //   rethrow;
+    // }
+
+      if (responseData['success'] == false) {
         throw responseData['message'];
       }
-    }catch(error){
-      throw error;
+      print(responseData);
+    } catch (error) {
+      rethrow;
     }
-
-    
-
-    // print(responseData);
   }
 
   Future<void> signup(
@@ -40,28 +73,24 @@ class Auth with ChangeNotifier {
     //// url untuk mobile
     // Uri url = Uri.parse("http://10.0.2.2:8000/api/register");
 
-
-    try{
-       var response = await http.post(url,
-        body: ({
-          "name": name,
-          "email": email,
-          "password": password,
-          "password_confirmation": cPassword,
-        }));
+    try {
+      var response = await http.post(url,
+          body: ({
+            "name": name,
+            "email": email,
+            "password": password,
+            "password_confirmation": cPassword,
+          }));
 
       var responseData = json.decode(response.body);
 
       if (responseData['success'] == false) {
-        throw responseData['message'];
+        throw responseData['message'].toString();
       }
 
-    // print(responseData);
-
-    }catch(error){
-      throw error;
+      print(responseData);
+    } catch (error) {
+      rethrow;
     }
-
-   
   }
 }

@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:login/page/home_page.dart';
+
 import 'package:login/page/auth/login_page.dart';
+import 'package:login/page/home_page.dart';
 import 'package:login/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -18,13 +19,18 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => Auth()
-        )
+          create: (ctx) => Auth(),
+        ),
       ],
-      builder: (context, child) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: LoginPage(),
-        // routes: {},
+      builder: (context, child) => Consumer<Auth>(
+        builder: (context, auth, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: auth.isAuth ? HomePage() : LoginPage(),
+          // routes: {
+          //   AddProductPage.route: (ctx) => AddProductPage(),
+          //   EditProductPage.route: (ctx) => EditProductPage(),
+          // },
+        ),
       ),
     );
   }

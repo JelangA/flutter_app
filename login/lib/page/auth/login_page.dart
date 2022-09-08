@@ -1,12 +1,10 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:login/page/home_page.dart';
+
 import 'package:login/page/auth/register_page.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:login/providers/auth.dart';
 import 'package:provider/provider.dart';
 
@@ -49,18 +47,17 @@ class _LoginPageState extends State<LoginPage> {
   //         .showSnackBar(SnackBar(content: Text(responeData.toString())));
   //   }
   // }
-  Duration get loginTime => Duration(milliseconds: 2250);
+  Duration get loginTime => Duration(milliseconds: 150);
 
   Future<String?> _authUserSignin() {
-    return Future.delayed(loginTime).then((_) {
-      try{
-        Provider.of<Auth>(context, listen: false)
-          .signin(emailController.text, passContrloller.text);
-      }catch(err){
-        print(err);
-        return err.toString();
+    return Future.delayed(loginTime).then((_) async {
+      // return 'hello';
+      try {
+        await Provider.of<Auth>(context, listen: false)
+            .signin(emailController.text, passContrloller.text);
+      } catch (err) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.toString())));
       }
-      
       return null;
     });
   }
@@ -102,9 +99,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               OutlinedButton.icon(
                   onPressed: () {
-                    // login();
-                    _authUserSignin();
-                    
+                    _authUserSignin().then((value) => Provider.of<Auth>(context, listen: false).tempData());
                   },
                   icon: Icon(
                     Icons.login,
@@ -126,13 +121,12 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          //get register page into object
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => RegisterPage()),
                           );
-                    }),
+                        }),
                 ]),
               ),
             ],
