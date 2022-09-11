@@ -1,14 +1,15 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(child: Center(child: Text("hello world"))),
-    );
+    return Container();
   }
 }

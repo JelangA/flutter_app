@@ -16,6 +16,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool ishiddenPassword = true;
   // String? _token;
 
   // bool? get isAuth {
@@ -56,7 +57,8 @@ class _LoginPageState extends State<LoginPage> {
         await Provider.of<Auth>(context, listen: false)
             .signin(emailController.text, passContrloller.text);
       } catch (err) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(err.toString())));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(err.toString())));
       }
       return null;
     });
@@ -88,18 +90,23 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextFormField(
                 controller: passContrloller,
-                obscureText: true,
+                obscureText: ishiddenPassword,
                 decoration: InputDecoration(
                     labelText: "password",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.password)),
+                    suffixIcon: InkWell(
+                      onTap: toggleViewPassword, 
+                      child: Icon(Icons.visibility)
+                    ),
+                ),
               ),
               SizedBox(
                 height: 45,
               ),
               OutlinedButton.icon(
                   onPressed: () {
-                    _authUserSignin().then((value) => Provider.of<Auth>(context, listen: false).tempData());
+                    _authUserSignin().then((value) =>
+                        Provider.of<Auth>(context, listen: false).tempData());
                   },
                   icon: Icon(
                     Icons.login,
@@ -134,5 +141,11 @@ class _LoginPageState extends State<LoginPage> {
         )),
       ),
     );
+  }
+
+  void toggleViewPassword() {
+    setState(() {
+      ishiddenPassword = !ishiddenPassword;
+    });
   }
 }

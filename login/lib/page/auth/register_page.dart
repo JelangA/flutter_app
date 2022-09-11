@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +14,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  bool isHiddenPassword = true;
+  bool isHiddenCPassword = true;
+
   // Future<void> register() async {
   //   var url = Uri.parse("http://127.0.0.1:8000/api/register");
   //   var response = await http.post(url,
@@ -44,15 +45,15 @@ class _RegisterPageState extends State<RegisterPage> {
     return Future.delayed(loginTime).then((_) async {
       try {
         await Provider.of<Auth>(context, listen: false).signup(
-          nameController.text,
-          emailController.text,
-          passController.text,
-          cpassContrloller.text);
+            nameController.text,
+            emailController.text,
+            passController.text,
+            cpassContrloller.text);
       } catch (err) {
-        print(err);
-        return err.toString();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(err.toString())));
       }
-      
+
       return null;
     });
   }
@@ -95,29 +96,37 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               TextFormField(
                 controller: passController,
-                obscureText: true,
+                obscureText: isHiddenPassword,
                 decoration: InputDecoration(
                     labelText: "password",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.password)),
+                    suffixIcon: InkWell(
+                      onTap: toggleViewPass, 
+                      child: Icon(Icons.visibility)
+                    )
+                    ),
               ),
               SizedBox(
                 height: 15,
               ),
               TextFormField(
                 controller: cpassContrloller,
-                obscureText: true,
+                obscureText: isHiddenCPassword,
                 decoration: InputDecoration(
                     labelText: "Confirm password",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.password)),
+                    suffixIcon: InkWell(
+                      onTap: toggleViewCPass, 
+                      child: Icon(Icons.visibility)
+                    )
+                    ),
               ),
               SizedBox(
                 height: 45,
               ),
               OutlinedButton.icon(
-                  onPressed: () { 
-                    _authUserSignup();
+                  onPressed: () {
+                    _authUserSignup().then((value) => Navigator.pop(context));
                   },
                   icon: Icon(
                     Icons.login,
@@ -151,5 +160,17 @@ class _RegisterPageState extends State<RegisterPage> {
         )),
       ),
     );
+  }
+
+  void toggleViewPass() {
+    setState(() {
+      isHiddenPassword = !isHiddenPassword;
+    });
+  }
+
+  void toggleViewCPass() {
+    setState(() {
+      isHiddenCPassword = !isHiddenCPassword;
+    });
   }
 }

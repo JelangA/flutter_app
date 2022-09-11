@@ -30,9 +30,8 @@ class Auth with ChangeNotifier {
 
   Future<void> signin(String email, String password) async {
      Uri url = Uri.parse("http://127.0.0.1:8000/api/login");
-    // Uri url = Uri.parse("https://reqres.in/api/login");
 
-    /// url untuk mobile
+    /// url mobile
     // Uri url = Uri.parse("http://10.0.2.2:8000/api/login");
 
     try {
@@ -70,7 +69,7 @@ class Auth with ChangeNotifier {
       String name, String email, String password, String cPassword) async {
     Uri url = Uri.parse("http://127.0.0.1:8000/api/register");
 
-    //// url untuk mobile
+    //// url mobile
     // Uri url = Uri.parse("http://10.0.2.2:8000/api/register");
 
     try {
@@ -85,9 +84,8 @@ class Auth with ChangeNotifier {
       var responseData = json.decode(response.body);
 
       if (responseData['success'] == false) {
-        throw responseData['message'].toString();
+        throw responseData['password'].toString();
       }
-
       print(responseData);
     } catch (error) {
       rethrow;
