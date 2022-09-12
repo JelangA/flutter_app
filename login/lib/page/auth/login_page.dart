@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_new
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -71,74 +71,120 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Login")),
+      backgroundColor: Colors.grey[200],
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SafeArea(
-            child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.email)),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: passContrloller,
-                obscureText: ishiddenPassword,
-                decoration: InputDecoration(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_circle,
+                  size: 150,
+                  color: Colors.blue,
+                ),
+                //hello again
+                Text(
+                  'Hello,',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Please login to continue',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 40),
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      labelText: "Email",
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.account_box)),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: passContrloller,
+                  obscureText: ishiddenPassword,
+                  decoration: InputDecoration(
                     labelText: "password",
                     border: OutlineInputBorder(),
                     suffixIcon: InkWell(
-                      onTap: toggleViewPassword, 
-                      child: Icon(Icons.visibility)
-                    ),
+                        onTap: toggleViewPassword,
+                        child: Icon(Icons.visibility)),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 45,
-              ),
-              OutlinedButton.icon(
-                  onPressed: () {
+                SizedBox(
+                  height: 45,
+                ),
+
+                new GestureDetector(
+                  onTap: () {
                     _authUserSignin().then((value) =>
                         Provider.of<Auth>(context, listen: false).tempData());
                   },
-                  icon: Icon(
-                    Icons.login,
-                    size: 18,
-                  ),
-                  label: Text("Login")),
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Belum Daftar? ',
-                    style: TextStyle(
-                      color: Colors.black,
+
+                  //button to login
+                  child: Container(
+                    //margin side of the button
+                    margin: EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
-                  TextSpan(
-                      text: 'Register',
-                      style: TextStyle(
-                        color: Colors.blue,
+                ),
+                SizedBox(height: 20),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Belum Daftar? ',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
-                          );
-                        }),
-                ]),
-              ),
-            ],
+                      TextSpan(
+                        text: 'Register',
+                        style: TextStyle(
+                          color: Colors.blue,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                          },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

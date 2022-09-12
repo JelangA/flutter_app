@@ -29,7 +29,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signin(String email, String password) async {
-     Uri url = Uri.parse("http://127.0.0.1:8000/api/login");
+    Uri url = Uri.parse("http://127.0.0.1:8000/api/login");
 
     /// url mobile
     // Uri url = Uri.parse("http://10.0.2.2:8000/api/login");
@@ -45,20 +45,23 @@ class Auth with ChangeNotifier {
       print(responseData);
 
       _tempidToken = responseData["token"];
+
       // tempuserId = responseData["localId"];
-
-    //   if (responseData['error'] != null) {
-    //     throw responseData['error'];
-    //   }
-    //   print(responseData);
-    //   notifyListeners();
-    // } catch (error) {
-    //   rethrow;
-    // }
-
-      if (responseData['success'] == false) {
-        throw responseData['message'];
-      }
+      //   if (responseData['error'] != null) {
+      //     throw responseData['error'];
+      //   }
+      //   print(responseData);
+      //   notifyListeners();
+      // } catch (error) {
+      //   rethrow;
+      // }
+      if (responseData['email'] != null) {
+          throw responseData['email'];
+        } else if (responseData['password'] != null) {
+          throw responseData['password'];
+        }else if(responseData['success'] == false){
+          throw responseData['message'];
+        }
       print(responseData);
     } catch (error) {
       rethrow;
@@ -69,7 +72,7 @@ class Auth with ChangeNotifier {
       String name, String email, String password, String cPassword) async {
     Uri url = Uri.parse("http://127.0.0.1:8000/api/register");
 
-    //// url mobile
+    /// url mobile
     // Uri url = Uri.parse("http://10.0.2.2:8000/api/register");
 
     try {
@@ -82,11 +85,16 @@ class Auth with ChangeNotifier {
           }));
 
       var responseData = json.decode(response.body);
-
-      if (responseData['success'] == false) {
-        throw responseData['password'].toString();
-      }
       print(responseData);
+
+      if (responseData['email'] != null) {
+        throw responseData['email'];
+      } else if (responseData['password'] != null) {
+        throw responseData['password'];
+      } else {
+        throw 'error';
+      }
+    
     } catch (error) {
       rethrow;
     }

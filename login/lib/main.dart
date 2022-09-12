@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         builder: (context, auth, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
           home: auth.isAuth ? HomePage() : LoginPage(),
+          
           // routes: {
           //   AddProductPage.route: (ctx) => AddProductPage(),
           //   EditProductPage.route: (ctx) => EditProductPage(),

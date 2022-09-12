@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_new
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -26,9 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
   //         'password': passController.text,
   //         'password_confirmation': cpassContrloller.text
   //       }));
-
   //   var responseData = json.decode(response.body);
-
   //   if (response.statusCode == 201) {
   //     ScaffoldMessenger.of(context)
   //         .showSnackBar(SnackBar(content: Text("email berhasil didaftarkan")));
@@ -39,10 +37,11 @@ class _RegisterPageState extends State<RegisterPage> {
   //         .showSnackBar(SnackBar(content: Text(responseData.toString())));
   //   }
   // }
-  Duration get loginTime => Duration(milliseconds: 2250);
+
+  Duration get regTime => Duration(milliseconds: 1000);
 
   Future<String?> _authUserSignup() {
-    return Future.delayed(loginTime).then((_) async {
+    return Future.delayed(regTime).then((_) async {
       try {
         await Provider.of<Auth>(context, listen: false).signup(
             nameController.text,
@@ -53,9 +52,9 @@ class _RegisterPageState extends State<RegisterPage> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(err.toString())));
       }
-
       return null;
     });
+    
   }
 
   var nameController = TextEditingController();
@@ -73,7 +72,15 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: [     
+              Text(
+                'Register Here',
+                style: TextStyle(
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
@@ -101,10 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "password",
                     border: OutlineInputBorder(),
                     suffixIcon: InkWell(
-                      onTap: toggleViewPass, 
-                      child: Icon(Icons.visibility)
-                    )
-                    ),
+                        onTap: toggleViewPass, child: Icon(Icons.visibility))),
               ),
               SizedBox(
                 height: 15,
@@ -116,23 +120,38 @@ class _RegisterPageState extends State<RegisterPage> {
                     labelText: "Confirm password",
                     border: OutlineInputBorder(),
                     suffixIcon: InkWell(
-                      onTap: toggleViewCPass, 
-                      child: Icon(Icons.visibility)
-                    )
-                    ),
+                        onTap: toggleViewCPass, child: Icon(Icons.visibility))),
               ),
               SizedBox(
                 height: 45,
               ),
-              OutlinedButton.icon(
-                  onPressed: () {
-                    _authUserSignup().then((value) => Navigator.pop(context));
-                  },
-                  icon: Icon(
-                    Icons.login,
-                    size: 18,
+              new GestureDetector(
+                onTap: () {
+                  _authUserSignup();
+                },
+                //button to login
+                child: Container(
+                  //margin side of the button
+                  margin: EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  label: Text("Register")),
+                  child: Center(
+                    child: Text(
+                      'Register',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
               SizedBox(
                 height: 15,
               ),
@@ -157,7 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ],
           ),
-        )),
+        ),),
       ),
     );
   }
