@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class Auth with ChangeNotifier {
   String? _idToken;
@@ -45,6 +46,7 @@ class Auth with ChangeNotifier {
       print(responseData);
 
       _tempidToken = responseData["token"];
+      print(responseData);
 
       // tempuserId = responseData["localId"];
       //   if (responseData['error'] != null) {
@@ -55,14 +57,16 @@ class Auth with ChangeNotifier {
       // } catch (error) {
       //   rethrow;
       // }
-      if (responseData['email'] != null) {
-          throw responseData['email'];
+        if(responseData['success'] == false){
+          throw responseData['message'];
         } else if (responseData['password'] != null) {
           throw responseData['password'];
-        }else if(responseData['success'] == false){
-          throw responseData['message'];
+        }else if (responseData['email'] != null) {
+          throw responseData['email'];
+        }else if(responseData['success'] == true){
+          throw "Login Berhasil";
         }
-      print(responseData);
+      
     } catch (error) {
       rethrow;
     }
@@ -91,8 +95,10 @@ class Auth with ChangeNotifier {
         throw responseData['email'];
       } else if (responseData['password'] != null) {
         throw responseData['password'];
-      } else {
-        throw 'error';
+      } else if(responseData['success'] == true){
+          throw "registrasi berhasil mohon login";
+      }else{
+        throw "error";
       }
     
     } catch (error) {
