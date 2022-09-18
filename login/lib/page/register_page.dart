@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_new
 
 import 'dart:convert';
 
@@ -20,7 +20,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> register() async {
     var url = Uri.parse("http://127.0.0.1:8000/api/register");
+
+    ///url mobile
     // var url = Uri.parse("http://10.0.2.2:8000/api/register");
+
     var response = await http.post(url,
         body: ({
           'name': nameController.text,
@@ -34,8 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (response.statusCode == 201) {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("email berhasil didaftarkan")));
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(responseData.toString())));
@@ -54,90 +56,123 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SafeArea(
-            child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: nameController,
-                decoration: InputDecoration(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Register Here',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: nameController,
+                  decoration: InputDecoration(
                     labelText: "Name",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.person)),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: emailController,
-                decoration: InputDecoration(
+                    suffixIcon: Icon(Icons.person),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: emailController,
+                  decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.email)),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: passController,
-                obscureText: isHiddenPassword,
-                decoration: InputDecoration(
+                    suffixIcon: Icon(Icons.email),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: passController,
+                  obscureText: isHiddenPassword,
+                  decoration: InputDecoration(
                     labelText: "password",
                     border: OutlineInputBorder(),
                     suffixIcon: InkWell(
                       onTap: _togglePasswordView,
-                      child: Icon(Icons.visibility))),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: cpassContrloller,
-                obscureText: isHiddenCpassword,
-                decoration: InputDecoration(
+                      child: Icon(Icons.visibility),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                TextFormField(
+                  controller: cpassContrloller,
+                  obscureText: isHiddenCpassword,
+                  decoration: InputDecoration(
                     labelText: "Confirm password",
                     border: OutlineInputBorder(),
                     suffixIcon: InkWell(
-                        onTap: _toggleCPasswordView,
-                        child: Icon(Icons.visibility))),
-              ),
-              SizedBox(
-                height: 45,
-              ),
-              OutlinedButton.icon(
-                  onPressed: () {
-                    register();
-                  },
-                  icon: Icon(
-                    Icons.login,
-                    size: 18,
-                  ),
-                  label: Text("Register")),
-              SizedBox(
-                height: 15,
-              ),
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Sudah Memiliki Akun? ',
-                    style: TextStyle(
-                      color: Colors.black,
+                      onTap: _toggleCPasswordView,
+                      child: Icon(Icons.visibility),
                     ),
                   ),
-                  TextSpan(
-                      text: 'Login',
-                      style: TextStyle(
-                        color: Colors.blue,
+                ),
+                SizedBox(
+                  height: 45,
+                ),
+                new GestureDetector(
+                  onTap: () {},
+                  //button to login
+                  child: Container(
+                    //margin side of the button
+                    margin: EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Register',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pop(context);
-                        }),
-                ]),
-              ),
-            ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                SizedBox(
+                  height: 15,
+                ),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Sudah Memiliki Akun? ',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      TextSpan(
+                          text: 'Login',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pop(context);
+                            }),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        )),
+        ),
       ),
     );
   }
@@ -147,9 +182,10 @@ class _RegisterPageState extends State<RegisterPage> {
       isHiddenPassword = !isHiddenPassword;
     });
   }
+
   void _toggleCPasswordView() {
     setState(() {
-      isHiddenCpassword= !isHiddenCpassword;
+      isHiddenCpassword = !isHiddenCpassword;
     });
   }
 }
